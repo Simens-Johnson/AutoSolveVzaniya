@@ -20,7 +20,7 @@ class LessonSolver:
                         f'https://vznaniya.ru/api/v2/lr/complete-task/{task}/{self.lesson_id}',
                         json={'group_id': self.lesson_group_id},
                         headers={"Authorization": f'Bearer {self.token}'}
-                    )
+                    )  
     
     async def solveTest(self):
         async with httpx.AsyncClient() as r:
