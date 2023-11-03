@@ -1,9 +1,9 @@
 import httpx, aiosqlite
 from aiogram import types, Router
-from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
-from vznaniya import signin
+from vznaniya.account import Account
 
 dp = Router()
 
@@ -30,12 +30,15 @@ async def getAccount(message: types.Message, state: FSMContext):
 
     try:
         email, password = message.text.split()
-        token = signin.get_token(email, password)
+        token = await Account().getToken(email, password)
         if token:
-            async with aiosqlite.connect("mydatabase.db") as db:
+            async with aiosqlite.connect("data.db") as db:
                 await db.execute("INSERT INTO users (id, email, password, token) VALUES (?, ?, ?, ?)", (message.from_user.id, email, password, token))
                 await db.commit()
-            await message.answer('*Успешно зарегал*')
+                
+            keyboard = ReplyKeyboardBuilder()
+            keyboard.button(text='Выбрать задания')
+            await message.answer('*Успешно зарегал*', reply_markup=keyboard.as_markup())
         else:
             await message.answer('*Неверный логин или пароль*')
         await state.clear()
