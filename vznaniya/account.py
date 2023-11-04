@@ -15,6 +15,7 @@ class Account():
                     "password": password
                 }
             )
+            
         if self.token.status_code == 200:
             return self.token.json().get("data").get("access_token")
         return False
