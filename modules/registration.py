@@ -1,5 +1,6 @@
 import aiosqlite
-from aiogram import types, Router
+
+from aiogram import types, Router, F
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
@@ -11,7 +12,7 @@ class States(StatesGroup):
     registration = State()
 
 
-@dp.message(lambda message: message.text == 'Регистрация') # создаем функцию которая проверяет сообщение на команду
+@dp.message(F.text == 'Регистрация') 
 async def userRegistration(message: types.Message, state: FSMContext):
     await message.answer(
         """
@@ -30,15 +31,18 @@ async def getAccount(message: types.Message, state: FSMContext):
 
     try:
         email, password = message.text.split()
-        token = await Account().getToken(email, password)
+        token = await Account().get_token(email, password)
         if token:
             async with aiosqlite.connect("data.db") as db:
-                await db.execute("INSERT INTO users (id, email, password, token) VALUES (?, ?, ?, ?)", (message.from_user.id, email, password, token))
+                await db.execute(
+                    "INSERT INTO users (id, email, password, token) VALUES (?, ?, ?, ?)", 
+                    (message.from_user.id, email, password, token)
+                )
                 await db.commit()
                 
             keyboard = ReplyKeyboardBuilder()
             keyboard.button(text='Выбрать задания')
-            await message.answer('*Успешно зарегал*', reply_markup=keyboard.as_markup())
+            await message.answer('*Успешно зарегистрирован*', reply_markup=keyboard.as_markup(resize_keyboard=True))
         else:
             await message.answer('*Неверный логин или пароль*')
         await state.clear()
