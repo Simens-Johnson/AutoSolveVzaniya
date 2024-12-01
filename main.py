@@ -2,8 +2,7 @@ import asyncio, os, aiosqlite
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import CommandStart
 from aiogram.enums import ParseMode
-from aiogram.fsm.context import FSMContext
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from importlib import import_module
 from dotenv import load_dotenv
 

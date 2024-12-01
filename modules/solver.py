@@ -1,8 +1,6 @@
 import httpx, aiosqlite
 from aiogram import types, Router
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from aiogram.fsm.state import State, StatesGroup
-from aiogram.fsm.context import FSMContext
 from vznaniya.account import Account
 from vznaniya.solver import LessonSolver
 
