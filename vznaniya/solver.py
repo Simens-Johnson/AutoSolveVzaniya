@@ -13,14 +13,14 @@ class LessonSolver:
     async def solve_tasks(self) -> None:
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                f"https://vznaniya.ru/api/v2/lessons/{self.lesson_id}?group_id={self.lesson_group_id}",
+                f"https://vznaniya.com/api/v2/lessons/{self.lesson_id}?group_id={self.lesson_group_id}",
                 headers=self.headers
             )
             tasks = response.json().get('data', {}).get("additional_info", {}).get('tasks', {})
             for task_id, count in tasks.items():
                 for _ in range(int(count)):
                     await client.post(
-                        f"https://vznaniya.ru/api/v2/lr/complete-task/{task_id}/{self.lesson_id}",
+                        f"https://vznaniya.com/api/v2/lr/complete-task/{task_id}/{self.lesson_id}",
                         json={'group_id': self.lesson_group_id},
                         headers=self.headers
                     )
@@ -29,7 +29,7 @@ class LessonSolver:
         timestamp = time.time() - random.randint(270, 330)
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                f"https://vznaniya.ru/api/v2/lesson-words/filter?lesson_id={self.lesson_id}&timestamp={timestamp}",
+                f"https://vznaniya.com/api/v2/lesson-words/filter?lesson_id={self.lesson_id}&timestamp={timestamp}",
                 headers=self.headers
             )
             test_data = response.json().get('data', [])
@@ -44,7 +44,7 @@ class LessonSolver:
             ]
 
             await client.post(
-                'https://vznaniya.ru/api/v2/lr/counting-test',
+                'https://vznaniya.com/api/v2/lr/counting-test',
                 headers=self.headers,
                 json={
                     "lesson_id": self.lesson_id,

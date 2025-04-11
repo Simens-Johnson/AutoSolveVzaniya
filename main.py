@@ -39,10 +39,10 @@ async def start_bot():
         await db.commit()
     
     properties = DefaultBotProperties(parse_mode=ParseMode.MARKDOWN)
-    bot = Bot(token=os.getenv('TOKEN'), default=properties)
+    bot = Bot(token=os.getenv('TOKEN'), default=properties) 
     dp.include_routers(registration.dp, solver.dp)
 
-    print('мя')
+    print('включен')
     await dp.start_polling(bot)
 
 

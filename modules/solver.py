@@ -23,7 +23,7 @@ async def solveTasks(message: types.Message):
         token = token[0]
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                'https://vznaniya.ru/api/v2/student-info',
+                'https://vznaniya.com/api/v2/student-info',
                 headers={'Authorization': f'Bearer {token}'}
             )
             if response.status_code != 200:

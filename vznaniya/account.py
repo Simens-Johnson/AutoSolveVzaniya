@@ -11,7 +11,7 @@ class Account:
     async def get_token(self, email: str, password: str) -> Optional[str]:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                'https://vznaniya.ru/api/v2/auth/login',
+                'https://vznaniya.com/api/v2/auth/login',
                 json={"email": email, "password": password}
             )
             if response.status_code == 200:
@@ -25,14 +25,14 @@ class Account:
 
         headers = {"Authorization": f"Bearer {self.token}"}
         async with httpx.AsyncClient() as client:
-            response = await client.get('https://vznaniya.ru/api/v2/lessons/filter', headers=headers)
+            response = await client.get('https://vznaniya.com/api/v2/lessons/filter', headers=headers)
             response_data = response.json()
             last_page = response_data.get('meta', {}).get('last_page', 1)
             actual_lessons: List[Lesson] = []
 
             for page in range(1, int(last_page) + 1):
                 paged_response = await client.get(
-                    f'https://vznaniya.ru/api/v2/lessons/filter?page={page}',
+                    f'https://vznaniya.com/api/v2/lessons/filter?page={page}',
                     headers=headers
                 )
                 lessons = paged_response.json().get('data', [])
